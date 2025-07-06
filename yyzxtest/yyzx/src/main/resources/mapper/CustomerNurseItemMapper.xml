@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.yyzx.mapper.CustomerNurseItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neuedu.yyzx.pojo.CustomerNurseItem">
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+ </sql>
+    <select id="getNurseItemByCustomer" resultType="com.neuedu.yyzx.vo.NurseItemCustomerVo">
+        SELECT DISTINCT
+            c.customer_name AS customerName,
+            ns.nursing_name AS itemName,
+            ns.serial_number AS serialNumber,
+            ns.nursing_name AS nursingName,
+            cni.item_id AS itemId,
+            ns.service_price AS servicePrice,
+            cni.nurse_number AS serviceNumber,
+            cni.buy_time AS buyTime,
+            cni.maturity_time AS maturityTime,
+            cni.is_deleted,
+            c.id AS customerId
+        FROM
+            customernurseitem cni
+                JOIN
+            customer c ON c.id = cni.customer_id
+                JOIN
+            nursing_service ns ON ns.id = cni.item_id
+        WHERE
+            cni.is_deleted != 0 AND
+            cni.customer_id = #{customerId}
+    </select>
+
+</mapper>
