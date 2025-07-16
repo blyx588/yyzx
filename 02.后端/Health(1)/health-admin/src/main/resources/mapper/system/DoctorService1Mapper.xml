@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.DoctorService1Mapper">
+    
+    <resultMap type="DoctorService1" id="DoctorService1Result">
+        <result property="id"    column="id"    />
+        <result property="serviceId"    column="service_id"    />
+        <result property="registerId"    column="register_id"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="exclusionContent"    column="exclusion_content"    />
+        <result property="unit"    column="unit"    />
+        <result property="price"    column="price"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDoctorService1Vo">
+        select id, service_id, register_id, service_name, service_code, exclusion_content, unit, price, create_by, create_time, update_by, update_time from doctor_service1
+    </sql>
+
+    <select id="selectDoctorService1List" parameterType="DoctorService1" resultMap="DoctorService1Result">
+        <include refid="selectDoctorService1Vo"/>
+        <where>  
+            <if test="serviceId != null "> and service_id = #{serviceId}</if>
+            <if test="registerId != null "> and register_id = #{registerId}</if>
+            <if test="serviceName != null  and serviceName != ''"> and service_name like concat('%', #{serviceName}, '%')</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and service_code = #{serviceCode}</if>
+            <if test="exclusionContent != null  and exclusionContent != ''"> and exclusion_content = #{exclusionContent}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="price != null "> and price = #{price}</if>
+        </where>
+    </select>
+    
+    <select id="selectDoctorService1ById" parameterType="Long" resultMap="DoctorService1Result">
+        <include refid="selectDoctorService1Vo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectDoctorService1ListByRegisterId" parameterType="long" resultMap="DoctorService1Result">
+        SELECT id, service_id, register_id, service_name, service_code, exclusion_content, unit, price, create_by, create_time, update_by, update_time
+        FROM doctor_service1 WHERE register_id = #{registerId}
+    </select>
+
+    <insert id="insertDoctorService1" parameterType="DoctorService1" useGeneratedKeys="true" keyProperty="id">
+        insert into doctor_service1
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">service_id,</if>
+            <if test="registerId != null">register_id,</if>
+            <if test="serviceName != null and serviceName != ''">service_name,</if>
+            <if test="serviceCode != null">service_code,</if>
+            <if test="exclusionContent != null">exclusion_content,</if>
+            <if test="unit != null">unit,</if>
+            <if test="price != null">price,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">#{serviceId},</if>
+            <if test="registerId != null">#{registerId},</if>
+            <if test="serviceName != null and serviceName != ''">#{serviceName},</if>
+            <if test="serviceCode != null">#{serviceCode},</if>
+            <if test="exclusionContent != null">#{exclusionContent},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDoctorService1" parameterType="DoctorService1">
+        update doctor_service1
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceId != null">service_id = #{serviceId},</if>
+            <if test="registerId != null">register_id = #{registerId},</if>
+            <if test="serviceName != null and serviceName != ''">service_name = #{serviceName},</if>
+            <if test="serviceCode != null">service_code = #{serviceCode},</if>
+            <if test="exclusionContent != null">exclusion_content = #{exclusionContent},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDoctorService1ById" parameterType="Long">
+        delete from doctor_service1 where id = #{id}
+    </delete>
+
+    <delete id="deleteDoctorService1ByIds" parameterType="String">
+        delete from doctor_service1 where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

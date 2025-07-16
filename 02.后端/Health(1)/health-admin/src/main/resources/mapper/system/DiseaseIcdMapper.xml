@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.DiseaseIcdMapper">
+    
+    <resultMap type="DiseaseIcd" id="DiseaseIcdResult">
+        <result property="id"    column="id"    />
+        <result property="icdCode"    column="icd_code"    />
+        <result property="diseaseCode"    column="disease_code"    />
+        <result property="diseaseName"    column="disease_name"    />
+        <result property="diseaseCategory"    column="disease_category"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDiseaseIcdVo">
+        select id, icd_code, disease_code, disease_name, disease_category, remark, create_by, create_time, update_by, update_time from disease_icd
+    </sql>
+
+    <select id="selectDiseaseIcdList" parameterType="DiseaseIcd" resultMap="DiseaseIcdResult">
+        <include refid="selectDiseaseIcdVo"/>
+        <where>  
+            <if test="icdCode != null  and icdCode != ''"> and icd_code = #{icdCode}</if>
+            <if test="diseaseCode != null  and diseaseCode != ''"> and disease_code = #{diseaseCode}</if>
+            <if test="diseaseName != null  and diseaseName != ''"> and disease_name like concat('%', #{diseaseName}, '%')</if>
+            <if test="diseaseCategory != null  and diseaseCategory != ''"> and disease_category = #{diseaseCategory}</if>
+        </where>
+    </select>
+    
+    <select id="selectDiseaseIcdById" parameterType="Long" resultMap="DiseaseIcdResult">
+        <include refid="selectDiseaseIcdVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDiseaseIcd" parameterType="DiseaseIcd" useGeneratedKeys="true" keyProperty="id">
+        insert into disease_icd
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="icdCode != null and icdCode != ''">icd_code,</if>
+            <if test="diseaseCode != null and diseaseCode != ''">disease_code,</if>
+            <if test="diseaseName != null and diseaseName != ''">disease_name,</if>
+            <if test="diseaseCategory != null">disease_category,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="icdCode != null and icdCode != ''">#{icdCode},</if>
+            <if test="diseaseCode != null and diseaseCode != ''">#{diseaseCode},</if>
+            <if test="diseaseName != null and diseaseName != ''">#{diseaseName},</if>
+            <if test="diseaseCategory != null">#{diseaseCategory},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsertDiseaseIcd">
+      insert into disease_icd
+      (icd_code, disease_code, disease_name, disease_category, remark, create_time, update_time)
+      values
+      <foreach collection="list" item="item" separator=",">
+        (
+          #{item.icdCode},
+          #{item.diseaseCode},
+          #{item.diseaseName},
+          #{item.diseaseCategory},
+          #{item.remark},
+          now(),
+          now()
+        )
+      </foreach>
+    </insert>
+
+    <update id="updateDiseaseIcd" parameterType="DiseaseIcd">
+        update disease_icd
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="icdCode != null and icdCode != ''">icd_code = #{icdCode},</if>
+            <if test="diseaseCode != null and diseaseCode != ''">disease_code = #{diseaseCode},</if>
+            <if test="diseaseName != null and diseaseName != ''">disease_name = #{diseaseName},</if>
+            <if test="diseaseCategory != null">disease_category = #{diseaseCategory},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDiseaseIcdById" parameterType="Long">
+        delete from disease_icd where id = #{id}
+    </delete>
+
+    <delete id="deleteDiseaseIcdByIds" parameterType="String">
+        delete from disease_icd where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

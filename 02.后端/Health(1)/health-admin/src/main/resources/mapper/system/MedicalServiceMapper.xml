@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.MedicalServiceMapper">
+    
+    <resultMap type="MedicalService" id="MedicalServiceResult">
+        <result property="id"    column="id"    />
+        <result property="financeCategory"    column="finance_category"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="nationalCode"    column="national_code"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="itemContent"    column="item_content"    />
+        <result property="exclusionContent"    column="exclusion_content"    />
+        <result property="unit"    column="unit"    />
+        <result property="price"    column="price"    />
+        <result property="comments"    column="comments"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMedicalServiceVo">
+        select id, finance_category, item_code, national_code, item_name, item_content, exclusion_content, unit, price, comments, remark, create_by, create_time, update_by, update_time from medical_service
+    </sql>
+
+    <select id="selectMedicalServiceList" parameterType="MedicalService" resultMap="MedicalServiceResult">
+        <include refid="selectMedicalServiceVo"/>
+        <where>  
+            <if test="financeCategory != null  and financeCategory != ''"> and finance_category = #{financeCategory}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="nationalCode != null  and nationalCode != ''"> and national_code = #{nationalCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="itemContent != null  and itemContent != ''"> and item_content = #{itemContent}</if>
+            <if test="exclusionContent != null  and exclusionContent != ''"> and exclusion_content = #{exclusionContent}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="comments != null  and comments != ''"> and comments = #{comments}</if>
+        </where>
+    </select>
+    
+    <select id="selectMedicalServiceById" parameterType="Long" resultMap="MedicalServiceResult">
+        <include refid="selectMedicalServiceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMedicalService" parameterType="MedicalService" useGeneratedKeys="true" keyProperty="id">
+        insert into medical_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="financeCategory != null">finance_category,</if>
+            <if test="itemCode != null and itemCode != ''">item_code,</if>
+            <if test="nationalCode != null">national_code,</if>
+            <if test="itemName != null and itemName != ''">item_name,</if>
+            <if test="itemContent != null">item_content,</if>
+            <if test="exclusionContent != null">exclusion_content,</if>
+            <if test="unit != null">unit,</if>
+            <if test="price != null">price,</if>
+            <if test="comments != null">comments,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="financeCategory != null">#{financeCategory},</if>
+            <if test="itemCode != null and itemCode != ''">#{itemCode},</if>
+            <if test="nationalCode != null">#{nationalCode},</if>
+            <if test="itemName != null and itemName != ''">#{itemName},</if>
+            <if test="itemContent != null">#{itemContent},</if>
+            <if test="exclusionContent != null">#{exclusionContent},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="price != null">#{price},</if>
+            <if test="comments != null">#{comments},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsertMedicalService">
+      insert into medical_service
+      (finance_category, item_code, national_code, item_name, item_content, exclusion_content, unit, price, comments, remark, create_time, update_time)
+      values
+      <foreach collection="list" item="item" separator=",">
+        (
+          #{item.financeCategory},
+          #{item.itemCode},
+          #{item.nationalCode},
+          #{item.itemName},
+          #{item.itemContent},
+          #{item.exclusionContent},
+          #{item.unit},
+          #{item.price},
+          #{item.comments},
+          #{item.remark},
+          now(),
+          now()
+        )
+      </foreach>
+    </insert>
+
+    <update id="updateMedicalService" parameterType="MedicalService">
+        update medical_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="financeCategory != null">finance_category = #{financeCategory},</if>
+            <if test="itemCode != null and itemCode != ''">item_code = #{itemCode},</if>
+            <if test="nationalCode != null">national_code = #{nationalCode},</if>
+            <if test="itemName != null and itemName != ''">item_name = #{itemName},</if>
+            <if test="itemContent != null">item_content = #{itemContent},</if>
+            <if test="exclusionContent != null">exclusion_content = #{exclusionContent},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="comments != null">comments = #{comments},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMedicalServiceById" parameterType="Long">
+        delete from medical_service where id = #{id}
+    </delete>
+
+    <delete id="deleteMedicalServiceByIds" parameterType="String">
+        delete from medical_service where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

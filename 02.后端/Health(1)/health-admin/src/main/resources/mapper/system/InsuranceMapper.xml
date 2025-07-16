@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.InsuranceMapper">
+    
+    <resultMap type="Insurance" id="InsuranceResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="reimbursementRate"    column="reimbursement_rate"    />
+        <result property="status"    column="status"    />
+        <result property="description"    column="description"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectInsuranceVo">
+        select id, name, reimbursement_rate, status, description, create_by, create_time, update_by, update_time from insurance
+    </sql>
+
+    <select id="selectInsuranceList" parameterType="Insurance" resultMap="InsuranceResult">
+        <include refid="selectInsuranceVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="reimbursementRate != null "> and reimbursement_rate = #{reimbursementRate}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+    
+    <select id="selectInsuranceById" parameterType="Long" resultMap="InsuranceResult">
+        <include refid="selectInsuranceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertInsurance" parameterType="Insurance" useGeneratedKeys="true" keyProperty="id">
+        insert into insurance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="reimbursementRate != null">reimbursement_rate,</if>
+            <if test="status != null">status,</if>
+            <if test="description != null">description,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="reimbursementRate != null">#{reimbursementRate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInsurance" parameterType="Insurance">
+        update insurance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="reimbursementRate != null">reimbursement_rate = #{reimbursementRate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInsuranceById" parameterType="Long">
+        delete from insurance where id = #{id}
+    </delete>
+
+    <delete id="deleteInsuranceByIds" parameterType="String">
+        delete from insurance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

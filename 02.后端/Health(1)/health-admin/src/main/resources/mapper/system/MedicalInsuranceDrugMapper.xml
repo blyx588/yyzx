@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.MedicalInsuranceDrugMapper">
+
+    <resultMap type="MedicalInsuranceDrug" id="MedicalInsuranceDrugResult">
+        <result property="id"    column="id"    />
+        <result property="category"    column="category"    />
+        <result property="drugNameCn"    column="drug_name_cn"    />
+        <result property="tradeName"    column="trade_name"    />
+        <result property="specification"    column="specification"    />
+        <result property="unit"    column="unit"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="paymentStandard"    column="payment_standard"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMedicalInsuranceDrugVo">
+        select id, category, drug_name_cn, trade_name, specification, unit, manufacturer, payment_standard, remarks, create_by, create_time, update_by, update_time from medical_insurance_drug
+    </sql>
+
+    <select id="selectMedicalInsuranceDrugList" parameterType="MedicalInsuranceDrug" resultMap="MedicalInsuranceDrugResult">
+        <include refid="selectMedicalInsuranceDrugVo"/>
+        <where>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="tradeName != null  and tradeName != ''"> and trade_name like concat('%', #{tradeName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectMedicalInsuranceDrugById" parameterType="Long" resultMap="MedicalInsuranceDrugResult">
+        <include refid="selectMedicalInsuranceDrugVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectByUnique" resultMap="MedicalInsuranceDrugResult">
+        select * from medical_insurance_drug
+        where drug_name_cn = #{drugNameCn}
+          and specification = #{specification}
+          and manufacturer = #{manufacturer}
+        limit 1
+    </select>
+
+    <insert id="insertMedicalInsuranceDrug" parameterType="MedicalInsuranceDrug" useGeneratedKeys="true" keyProperty="id">
+        insert into medical_insurance_drug
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="category != null">category,</if>
+            <if test="drugNameCn != null and drugNameCn != ''">drug_name_cn,</if>
+            <if test="tradeName != null">trade_name,</if>
+            <if test="specification != null">specification,</if>
+            <if test="unit != null">unit,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="paymentStandard != null">payment_standard,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="category != null">#{category},</if>
+            <if test="drugNameCn != null and drugNameCn != ''">#{drugNameCn},</if>
+            <if test="tradeName != null">#{tradeName},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="paymentStandard != null">#{paymentStandard},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsertMedicalInsuranceDrug" parameterType="java.util.List">
+        insert into medical_insurance_drug
+        (category, drug_name_cn, trade_name, specification, unit, manufacturer, payment_standard, remarks, create_by, create_time, update_by, update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.category},
+                #{item.drugNameCn},
+                #{item.tradeName},
+                #{item.specification},
+                #{item.unit},
+                #{item.manufacturer},
+                #{item.paymentStandard},
+                #{item.remarks},
+                #{item.createBy},
+                #{item.createTime},
+                #{item.updateBy},
+                #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateMedicalInsuranceDrug" parameterType="MedicalInsuranceDrug">
+        update medical_insurance_drug
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="category != null">category = #{category},</if>
+            <if test="drugNameCn != null and drugNameCn != ''">drug_name_cn = #{drugNameCn},</if>
+            <if test="tradeName != null">trade_name = #{tradeName},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="paymentStandard != null">payment_standard = #{paymentStandard},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMedicalInsuranceDrugById" parameterType="Long">
+        delete from medical_insurance_drug where id = #{id}
+    </delete>
+
+    <delete id="deleteMedicalInsuranceDrugByIds" parameterType="String">
+        delete from medical_insurance_drug where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

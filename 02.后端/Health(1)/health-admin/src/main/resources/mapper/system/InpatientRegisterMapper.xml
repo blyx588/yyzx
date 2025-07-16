@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.InpatientRegisterMapper">
+    
+    <resultMap type="InpatientRegister" id="InpatientRegisterResult">
+        <result property="id"    column="id"    />
+        <result property="admissionNo"    column="admission_no"    />
+        <result property="name"    column="name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="age"    column="age"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="gender"    column="gender"    />
+        <result property="address"    column="address"    />
+        <result property="settlementType"    column="settlement_type"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="admissionTime"    column="admission_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectInpatientRegisterVo">
+        select id, admission_no, name, id_card, age, birth_date, gender, address, settlement_type, work_status, admission_time, create_by, create_time, update_by, update_time from inpatient_register
+    </sql>
+
+    <select id="selectInpatientRegisterList" parameterType="InpatientRegister" resultMap="InpatientRegisterResult">
+        <include refid="selectInpatientRegisterVo"/>
+        <where>  
+            <if test="admissionNo != null  and admissionNo != ''"> and admission_no = #{admissionNo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="birthDate != null "> and birth_date = #{birthDate}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="settlementType != null  and settlementType != ''"> and settlement_type = #{settlementType}</if>
+            <if test="workStatus != null  and workStatus != ''"> and work_status = #{workStatus}</if>
+            <if test="admissionTime != null "> and admission_time = #{admissionTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectInpatientRegisterById" parameterType="Long" resultMap="InpatientRegisterResult">
+        <include refid="selectInpatientRegisterVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertInpatientRegister" parameterType="InpatientRegister" useGeneratedKeys="true" keyProperty="id">
+        insert into inpatient_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="admissionNo != null and admissionNo != ''">admission_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="idCard != null and idCard != ''">id_card,</if>
+            <if test="age != null">age,</if>
+            <if test="birthDate != null">birth_date,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="address != null">address,</if>
+            <if test="settlementType != null and settlementType != ''">settlement_type,</if>
+            <if test="workStatus != null and workStatus != ''">work_status,</if>
+            <if test="admissionTime != null">admission_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="admissionNo != null and admissionNo != ''">#{admissionNo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="idCard != null and idCard != ''">#{idCard},</if>
+            <if test="age != null">#{age},</if>
+            <if test="birthDate != null">#{birthDate},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="address != null">#{address},</if>
+            <if test="settlementType != null and settlementType != ''">#{settlementType},</if>
+            <if test="workStatus != null and workStatus != ''">#{workStatus},</if>
+            <if test="admissionTime != null">#{admissionTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInpatientRegister" parameterType="InpatientRegister">
+        update inpatient_register
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="admissionNo != null and admissionNo != ''">admission_no = #{admissionNo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="birthDate != null">birth_date = #{birthDate},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="settlementType != null and settlementType != ''">settlement_type = #{settlementType},</if>
+            <if test="workStatus != null and workStatus != ''">work_status = #{workStatus},</if>
+            <if test="admissionTime != null">admission_time = #{admissionTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInpatientRegisterById" parameterType="Long">
+        delete from inpatient_register where id = #{id}
+    </delete>
+
+    <delete id="deleteInpatientRegisterByIds" parameterType="String">
+        delete from inpatient_register where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

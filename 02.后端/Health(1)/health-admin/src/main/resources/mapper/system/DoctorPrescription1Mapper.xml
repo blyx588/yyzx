@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.DoctorPrescription1Mapper">
+
+    <resultMap type="DoctorPrescription1" id="DoctorPrescription1Result">
+        <result property="id"    column="id"    />
+        <result property="registerId"    column="register_id"    />
+        <result property="drugId"    column="drug_id"    />
+        <result property="drugName"    column="drug_name"    />
+        <result property="unit"    column="unit"    />
+        <result property="price"    column="price"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="specification"    column="specification"    />
+        <result property="manufacturer"    column="manufacturer"    />
+    </resultMap>
+
+    <sql id="selectDoctorPrescription1Vo">
+        select id, register_id, drug_id, drug_name, unit, price, create_by, create_time, update_by, update_time, specification, manufacturer from doctor_prescription1
+    </sql>
+
+    <select id="selectDoctorPrescription1List" parameterType="DoctorPrescription1" resultMap="DoctorPrescription1Result">
+        <include refid="selectDoctorPrescription1Vo"/>
+        <where>
+            <if test="registerId != null "> and register_id = #{registerId}</if>
+            <if test="drugId != null "> and drug_id = #{drugId}</if>
+            <if test="drugName != null  and drugName != ''"> and drug_name like concat('%', #{drugName}, '%')</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="specification != null  and specification != ''"> and specification = #{specification}</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and manufacturer = #{manufacturer}</if>
+        </where>
+    </select>
+
+    <select id="selectDoctorPrescription1ById" parameterType="Long" resultMap="DoctorPrescription1Result">
+        <include refid="selectDoctorPrescription1Vo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectDoctorPrescription1ListByRegisterId" parameterType="long" resultMap="DoctorPrescription1Result">
+        SELECT id, register_id, drug_id, drug_name, unit, price, create_by, create_time, update_by, update_time, specification, manufacturer, category
+        FROM doctor_prescription1 WHERE register_id = #{registerId}
+    </select>
+
+    <insert id="insertDoctorPrescription1" parameterType="DoctorPrescription1" useGeneratedKeys="true" keyProperty="id">
+        insert into doctor_prescription1
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="registerId != null">register_id,</if>
+            <if test="drugId != null">drug_id,</if>
+            <if test="drugName != null and drugName != ''">drug_name,</if>
+            <if test="unit != null">unit,</if>
+            <if test="price != null">price,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="specification != null">specification,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="category != null">category,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="registerId != null">#{registerId},</if>
+            <if test="drugId != null">#{drugId},</if>
+            <if test="drugName != null and drugName != ''">#{drugName},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="specification != null">#{specification},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="category != null">#{category},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDoctorPrescription1" parameterType="DoctorPrescription1">
+        update doctor_prescription1
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="registerId != null">register_id = #{registerId},</if>
+            <if test="drugId != null">drug_id = #{drugId},</if>
+            <if test="drugName != null and drugName != ''">drug_name = #{drugName},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDoctorPrescription1ById" parameterType="Long">
+        delete from doctor_prescription1 where id = #{id}
+    </delete>
+
+    <delete id="deleteDoctorPrescription1ByIds" parameterType="String">
+        delete from doctor_prescription1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

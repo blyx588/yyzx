@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.DoctorAdmissionDiagnosisMapper">
+
+    <resultMap type="DoctorAdmissionDiagnosis" id="DoctorAdmissionDiagnosisResult">
+        <result property="id" column="id" />
+        <result property="registerId" column="register_id" />
+        <result property="diseaseId" column="disease_id" />
+        <result property="icdCode" column="icd_code" />
+        <result property="diseaseCode" column="disease_code" />
+        <result property="diseaseName" column="disease_name" />
+        <result property="diseaseCategory" column="disease_category" />
+        <result property="diagnosisType" column="diagnosis_type" />
+        <result property="diagnosisDesc" column="diagnosis_desc" />
+        <result property="diagnosisTime" column="diagnosis_time" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectDoctorAdmissionDiagnosisVo">
+        select id, register_id, disease_id, icd_code, disease_code, disease_name, disease_category,
+               diagnosis_type, diagnosis_desc, diagnosis_time, create_by, create_time, update_by, update_time
+        from doctor_admission_diagnosis
+    </sql>
+
+    <select id="selectDoctorAdmissionDiagnosisList" parameterType="DoctorAdmissionDiagnosis" resultMap="DoctorAdmissionDiagnosisResult">
+        <include refid="selectDoctorAdmissionDiagnosisVo"/>
+        <where>
+            <if test="registerId != null"> and register_id = #{registerId}</if>
+            <if test="diseaseId != null"> and disease_id = #{diseaseId}</if>
+            <if test="icdCode != null and icdCode != ''"> and icd_code like concat('%', #{icdCode}, '%')</if>
+            <if test="diseaseCode != null and diseaseCode != ''"> and disease_code like concat('%', #{diseaseCode}, '%')</if>
+            <if test="diseaseName != null and diseaseName != ''"> and disease_name like concat('%', #{diseaseName}, '%')</if>
+            <if test="diseaseCategory != null and diseaseCategory != ''"> and disease_category = #{diseaseCategory}</if>
+            <if test="diagnosisType != null and diagnosisType != ''"> and diagnosis_type = #{diagnosisType}</if>
+            <if test="diagnosisDesc != null and diagnosisDesc != ''"> and diagnosis_desc like concat('%', #{diagnosisDesc}, '%')</if>
+            <if test="diagnosisTime != null and diagnosisTime != ''"> and diagnosis_time = #{diagnosisTime}</if>
+        </where>
+        order by diagnosis_time desc
+    </select>
+
+    <select id="selectDoctorAdmissionDiagnosisById" parameterType="Long" resultMap="DoctorAdmissionDiagnosisResult">
+        <include refid="selectDoctorAdmissionDiagnosisVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectByRegisterId" parameterType="Long" resultMap="DoctorAdmissionDiagnosisResult">
+        <include refid="selectDoctorAdmissionDiagnosisVo"/>
+        where register_id = #{registerId}
+        order by diagnosis_time desc
+    </select>
+
+    <insert id="insertDoctorAdmissionDiagnosis" parameterType="DoctorAdmissionDiagnosis" useGeneratedKeys="true" keyProperty="id">
+        insert into doctor_admission_diagnosis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="registerId != null">register_id,</if>
+            <if test="diseaseId != null">disease_id,</if>
+            <if test="icdCode != null and icdCode != ''">icd_code,</if>
+            <if test="diseaseCode != null and diseaseCode != ''">disease_code,</if>
+            <if test="diseaseName != null and diseaseName != ''">disease_name,</if>
+            <if test="diseaseCategory != null and diseaseCategory != ''">disease_category,</if>
+            <if test="diagnosisType != null and diagnosisType != ''">diagnosis_type,</if>
+            <if test="diagnosisDesc != null and diagnosisDesc != ''">diagnosis_desc,</if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">diagnosis_time,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="registerId != null">#{registerId},</if>
+            <if test="diseaseId != null">#{diseaseId},</if>
+            <if test="icdCode != null and icdCode != ''">#{icdCode},</if>
+            <if test="diseaseCode != null and diseaseCode != ''">#{diseaseCode},</if>
+            <if test="diseaseName != null and diseaseName != ''">#{diseaseName},</if>
+            <if test="diseaseCategory != null and diseaseCategory != ''">#{diseaseCategory},</if>
+            <if test="diagnosisType != null and diagnosisType != ''">#{diagnosisType},</if>
+            <if test="diagnosisDesc != null and diagnosisDesc != ''">#{diagnosisDesc},</if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">#{diagnosisTime},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDoctorAdmissionDiagnosis" parameterType="DoctorAdmissionDiagnosis">
+        update doctor_admission_diagnosis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="registerId != null">register_id = #{registerId},</if>
+            <if test="diseaseId != null">disease_id = #{diseaseId},</if>
+            <if test="icdCode != null and icdCode != ''">icd_code = #{icdCode},</if>
+            <if test="diseaseCode != null and diseaseCode != ''">disease_code = #{diseaseCode},</if>
+            <if test="diseaseName != null and diseaseName != ''">disease_name = #{diseaseName},</if>
+            <if test="diseaseCategory != null and diseaseCategory != ''">disease_category = #{diseaseCategory},</if>
+            <if test="diagnosisType != null and diagnosisType != ''">diagnosis_type = #{diagnosisType},</if>
+            <if test="diagnosisDesc != null and diagnosisDesc != ''">diagnosis_desc = #{diagnosisDesc},</if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">diagnosis_time = #{diagnosisTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDoctorAdmissionDiagnosisById" parameterType="Long">
+        delete from doctor_admission_diagnosis where id = #{id}
+    </delete>
+
+    <delete id="deleteDoctorAdmissionDiagnosisByIds" parameterType="Long">
+        delete from doctor_admission_diagnosis where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

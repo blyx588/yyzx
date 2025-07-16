@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.DoctorPrimaryDiagnosisMapper">
+
+    <resultMap type="DoctorPrimaryDiagnosis" id="DoctorPrimaryDiagnosisResult">
+        <result property="id" column="id"/>
+        <result property="registerId" column="register_id"/>
+        <result property="diseaseId" column="disease_id"/>
+        <result property="icdCode" column="icd_code"/>
+        <result property="diseaseCode" column="disease_code"/>
+        <result property="diseaseName" column="disease_name"/>
+        <result property="diseaseCategory" column="disease_category"/>
+        <result property="diagnosisDesc" column="diagnosis_desc"/>
+        <result property="diagnosisTime" column="diagnosis_time"/>
+        <result property="isComplication" column="is_complication"/>
+        <result property="severity" column="severity"/>
+        <result property="treatmentEffect" column="treatment_effect"/>
+    </resultMap>
+
+    <sql id="selectDoctorPrimaryDiagnosisVo">
+        SELECT id, register_id, disease_id, icd_code, disease_code, disease_name,
+               disease_category, diagnosis_desc, diagnosis_time, is_complication,
+               severity, treatment_effect
+        FROM doctor_primary_diagnosis
+    </sql>
+
+    <select id="selectDoctorPrimaryDiagnosisList" parameterType="DoctorPrimaryDiagnosis" resultMap="DoctorPrimaryDiagnosisResult">
+        <include refid="selectDoctorPrimaryDiagnosisVo"/>
+        <where>
+            <if test="registerId != null">AND register_id = #{registerId}</if>
+            <if test="diseaseId != null">AND disease_id = #{diseaseId}</if>
+            <if test="icdCode != null and icdCode != ''">AND icd_code LIKE CONCAT('%', #{icdCode}, '%')</if>
+            <if test="diseaseName != null and diseaseName != ''">AND disease_name LIKE CONCAT('%', #{diseaseName}, '%')</if>
+            <if test="isComplication != null">AND is_complication = #{isComplication}</if>
+        </where>
+        ORDER BY diagnosis_time DESC
+    </select>
+
+    <insert id="insertDoctorPrimaryDiagnosis" parameterType="DoctorPrimaryDiagnosis" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO doctor_primary_diagnosis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            register_id, disease_id, icd_code, disease_code, disease_name,
+            disease_category, diagnosis_desc, diagnosis_time, is_complication,
+            severity, treatment_effect,
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{registerId}, #{diseaseId}, #{icdCode}, #{diseaseCode}, #{diseaseName},
+            #{diseaseCategory}, #{diagnosisDesc}, #{diagnosisTime}, #{isComplication},
+            #{severity}, #{treatmentEffect},
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateDoctorPrimaryDiagnosis" parameterType="DoctorPrimaryDiagnosis">
+        UPDATE doctor_primary_diagnosis
+        <set>
+            <if test="registerId != null">register_id = #{registerId},</if>
+            <if test="diseaseId != null">disease_id = #{diseaseId},</if>
+            <if test="icdCode != null and icdCode != ''">icd_code = #{icdCode},</if>
+            <if test="diseaseName != null and diseaseName != ''">disease_name = #{diseaseName},</if>
+            <if test="diagnosisDesc != null and diagnosisDesc != ''">diagnosis_desc = #{diagnosisDesc},</if>
+            <if test="isComplication != null">is_complication = #{isComplication},</if>
+            <if test="severity != null and severity != ''">severity = #{severity},</if>
+            <if test="treatmentEffect != null and treatmentEffect != ''">treatment_effect = #{treatmentEffect},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteDoctorPrimaryDiagnosisById" parameterType="Long">
+        DELETE FROM doctor_primary_diagnosis WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteDoctorPrimaryDiagnosisByIds" parameterType="Long">
+        DELETE FROM doctor_primary_diagnosis WHERE id IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByRegisterId" parameterType="Long" resultMap="DoctorPrimaryDiagnosisResult">
+        <include refid="selectDoctorPrimaryDiagnosisVo"/>
+        WHERE register_id = #{registerId}
+        ORDER BY diagnosis_time DESC
+    </select>
+
+    <insert id="batchInsertPrimaryDiagnosis" parameterType="list">
+        INSERT INTO doctor_primary_diagnosis (
+        register_id, disease_id, icd_code, disease_code, disease_name,
+        disease_category, diagnosis_desc, diagnosis_time, is_complication,
+        severity, treatment_effect, create_by, create_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.registerId}, #{item.diseaseId}, #{item.icdCode}, #{item.diseaseCode},
+            #{item.diseaseName}, #{item.diseaseCategory}, #{item.diagnosisDesc},
+            #{item.diagnosisTime}, #{item.isComplication}, #{item.severity},
+            #{item.treatmentEffect}, #{item.createBy}, sysdate()
+            )
+        </foreach>
+    </insert>
+</mapper>

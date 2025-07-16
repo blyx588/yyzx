@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.PatientMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.health.system.domain.Patient">
+        <id column="id" property="id" />
+        <result column="hospital_no" property="hospitalNo" />
+        <result column="name" property="name" />
+        <result column="id_card" property="idCard" />
+        <result column="age" property="age" />
+        <result column="birth_date" property="birthDate" />
+        <result column="gender" property="gender" />
+        <result column="address" property="address" />
+        <result column="settlement_type" property="settlementType" />
+        <result column="work_status" property="workStatus" />
+        <result column="admission_time" property="admissionTime" />
+        <result column="register_time" property="registerTime" />
+        <result column="status" property="status" />
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, hospital_no, name, id_card, age, birth_date, gender, address, settlement_type, work_status, admission_time, register_time, status
+    </sql>
+
+</mapper>

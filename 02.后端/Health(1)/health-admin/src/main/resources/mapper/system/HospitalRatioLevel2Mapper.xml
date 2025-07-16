@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.health.system.mapper.HospitalRatioLevel2Mapper">
+    
+    <resultMap type="HospitalRatioLevel2" id="HospitalRatioLevel2Result">
+        <result property="id"    column="id"    />
+        <result property="deductible"    column="deductible"    />
+        <result property="levelLine"    column="level_line"    />
+        <result property="personType"    column="person_type"    />
+        <result property="reimbursementRate"    column="reimbursement_rate"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHospitalRatioLevel2Vo">
+        select id, deductible, level_line, person_type, reimbursement_rate, status, remark, create_by, create_time, update_by, update_time from hospital_ratio_level2
+    </sql>
+
+    <select id="selectHospitalRatioLevel2List" parameterType="HospitalRatioLevel2" resultMap="HospitalRatioLevel2Result">
+        <include refid="selectHospitalRatioLevel2Vo"/>
+        <where>  
+            <if test="deductible != null "> and deductible = #{deductible}</if>
+            <if test="levelLine != null "> and level_line = #{levelLine}</if>
+            <if test="personType != null  and personType != ''"> and person_type = #{personType}</if>
+            <if test="reimbursementRate != null "> and reimbursement_rate = #{reimbursementRate}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectHospitalRatioLevel2ById" parameterType="Long" resultMap="HospitalRatioLevel2Result">
+        <include refid="selectHospitalRatioLevel2Vo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertHospitalRatioLevel2" parameterType="HospitalRatioLevel2" useGeneratedKeys="true" keyProperty="id">
+        insert into hospital_ratio_level2
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deductible != null">deductible,</if>
+            <if test="levelLine != null">level_line,</if>
+            <if test="personType != null and personType != ''">person_type,</if>
+            <if test="reimbursementRate != null">reimbursement_rate,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deductible != null">#{deductible},</if>
+            <if test="levelLine != null">#{levelLine},</if>
+            <if test="personType != null and personType != ''">#{personType},</if>
+            <if test="reimbursementRate != null">#{reimbursementRate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHospitalRatioLevel2" parameterType="HospitalRatioLevel2">
+        update hospital_ratio_level2
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deductible != null">deductible = #{deductible},</if>
+            <if test="levelLine != null">level_line = #{levelLine},</if>
+            <if test="personType != null and personType != ''">person_type = #{personType},</if>
+            <if test="reimbursementRate != null">reimbursement_rate = #{reimbursementRate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHospitalRatioLevel2ById" parameterType="Long">
+        delete from hospital_ratio_level2 where id = #{id}
+    </delete>
+
+    <delete id="deleteHospitalRatioLevel2ByIds" parameterType="String">
+        delete from hospital_ratio_level2 where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

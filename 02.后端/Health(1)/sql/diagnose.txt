@@ -1,0 +1,135 @@
+-- auto-generated definition
+create table doctor_admission_diagnosis
+(
+    id               bigint auto_increment comment '主键ID'
+        primary key,
+    register_id      bigint                                not null comment '入院登记ID',
+    disease_id       bigint                                not null comment '疾病ID',
+    icd_code         varchar(32)                           not null comment '国际ICD编码',
+    disease_code     varchar(32)                           not null comment '疾病编码',
+    disease_name     varchar(128)                          not null comment '疾病名称',
+    disease_category varchar(64)                           null comment '疾病分类',
+    diagnosis_type   varchar(32)                           null comment '诊断类型(入院/初步)',
+    diagnosis_desc   text                                  null comment '诊断描述',
+    diagnosis_time   datetime                              null comment '诊断时间',
+    create_by        varchar(64) default ''                null comment '创建者',
+    create_time      datetime    default CURRENT_TIMESTAMP null comment '创建时间',
+    update_by        varchar(64) default ''                null comment '更新者',
+    update_time      datetime    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
+    constraint fk_admission_diagnosis_disease
+        foreign key (disease_id) references disease_icd (id),
+    constraint fk_admission_diagnosis_register
+        foreign key (register_id) references inpatient_register (id)
+)
+    comment '入院诊断表' collate = utf8mb4_unicode_ci
+                         row_format = DYNAMIC;
+
+create index idx_disease_id
+    on doctor_admission_diagnosis (disease_id);
+
+create index idx_register_id
+    on doctor_admission_diagnosis (register_id);
+
+
+
+-- auto-generated definition
+create table doctor_primary_diagnosis
+(
+    id               bigint auto_increment comment '主键ID'
+        primary key,
+    register_id      bigint                                not null comment '入院登记ID',
+    disease_id       bigint                                not null comment '疾病ID',
+    icd_code         varchar(32)                           not null comment '国际ICD编码',
+    disease_code     varchar(32)                           not null comment '疾病编码',
+    disease_name     varchar(128)                          not null comment '疾病名称',
+    disease_category varchar(64)                           null comment '疾病分类',
+    diagnosis_desc   text                                  null comment '诊断描述',
+    diagnosis_time   datetime                              null comment '确诊时间',
+    is_complication  tinyint(1)  default 0                 null comment '是否并发症(0否 1是)',
+    severity         varchar(32)                           null comment '严重程度',
+    treatment_effect varchar(32)                           null comment '治疗效果',
+    create_by        varchar(64) default ''                null comment '创建者',
+    create_time      datetime    default CURRENT_TIMESTAMP null comment '创建时间',
+    update_by        varchar(64) default ''                null comment '更新者',
+    update_time      datetime    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
+    constraint fk_primary_diagnosis_disease
+        foreign key (disease_id) references disease_icd (id),
+    constraint fk_primary_diagnosis_register
+        foreign key (register_id) references inpatient_register (id)
+)
+    comment '主要诊断表' collate = utf8mb4_unicode_ci
+                         row_format = DYNAMIC;
+
+create index idx_disease_id
+    on doctor_primary_diagnosis (disease_id);
+
+create index idx_register_id
+    on doctor_primary_diagnosis (register_id);
+
+
+
+-- auto-generated definition
+create table doctor_secondary_diagnosis
+(
+    id                  bigint auto_increment comment '主键ID'
+        primary key,
+    register_id         bigint                                not null comment '入院登记ID',
+    disease_id          bigint                                not null comment '疾病ID',
+    icd_code            varchar(32)                           not null comment '国际ICD编码',
+    disease_code        varchar(32)                           not null comment '疾病编码',
+    disease_name        varchar(128)                          not null comment '疾病名称',
+    disease_category    varchar(64)                           null comment '疾病分类',
+    diagnosis_desc      text                                  null comment '诊断描述',
+    diagnosis_time      datetime                              null comment '确诊时间',
+    relation_to_primary varchar(32)                           null comment '与主要诊断关系',
+    is_complication     tinyint(1)  default 0                 null comment '是否并发症(0否 1是)',
+    create_by           varchar(64) default ''                null comment '创建者',
+    create_time         datetime    default CURRENT_TIMESTAMP null comment '创建时间',
+    update_by           varchar(64) default ''                null comment '更新者',
+    update_time         datetime    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
+    constraint fk_secondary_diagnosis_disease
+        foreign key (disease_id) references disease_icd (id),
+    constraint fk_secondary_diagnosis_register
+        foreign key (register_id) references inpatient_register (id)
+)
+    comment '其他诊断表' collate = utf8mb4_unicode_ci
+                         row_format = DYNAMIC;
+
+create index idx_disease_id
+    on doctor_secondary_diagnosis (disease_id);
+
+create index idx_register_id
+    on doctor_secondary_diagnosis (register_id);
+
+
+
+-- auto-generated definition
+create table patient
+(
+    id              bigint auto_increment comment '主键ID'
+        primary key,
+    hospital_no     varchar(50)                        not null comment '住院号',
+    name            varchar(50)                        not null comment '姓名',
+    id_card         varchar(20)                        not null comment '身份证号',
+    age             int                                not null comment '年龄',
+    birth_date      date                               not null comment '出生日期',
+    gender          varchar(10)                        not null comment '性别',
+    address         varchar(255)                       null comment '家庭住址',
+    settlement_type varchar(20)                        not null comment '结算类别',
+    work_status     varchar(20)                        not null comment '工作状态',
+    admission_time  datetime                           not null comment '入院时间',
+    register_time   datetime default CURRENT_TIMESTAMP not null comment '登记时间',
+    status          tinyint  default 0                 not null comment '状态：0-待审核，1-已审核，2-已取消',
+    constraint idx_hospital_no
+        unique (hospital_no)
+)
+    comment '入院登记表' charset = utf8mb4;
+
+create index idx_admission_time
+    on patient (admission_time);
+
+create index idx_id_card
+    on patient (id_card);
+
+create index idx_register_time
+    on patient (register_time);
