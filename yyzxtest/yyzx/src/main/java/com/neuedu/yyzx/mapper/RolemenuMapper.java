@@ -1,9 +1,0 @@
-package com.neuedu.yyzx.mapper;
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.neuedu.yyzx.pojo.Rolemenu;
-
-
-public interface RolemenuMapper extends BaseMapper<Rolemenu> {
-
-}
